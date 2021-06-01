@@ -1,0 +1,10 @@
+matplotlib==3.3.4
+tikzplotlib==0.9.7
+git+git://github.com/zv5dmjq5/backpack.git@07facecc1c5e2cce1baea77b480724a9774cddf6#egg=backpack-for-pytorch
+git+git://github.com/fsschneider/DeepOBS@bfb1eb35e45b913f916dddf15165d23e0a40de00
+torch==1.7.1
+torchvision==0.8.2
+torchaudio==0.7.2
+numpy==1.20.1
+json_tricks==3.15.5
+dill==0.3.3
