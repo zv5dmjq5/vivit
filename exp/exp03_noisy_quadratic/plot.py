@@ -4,7 +4,7 @@ in the results folder), it creates 6 plots:
 2. Distances to the argmin over the optimization steps 
 3. Final loss values over multiple runs as boxplots
 4. Final distance values over multiple runs as boxplots
-5. Optimizationn trajectories in a 2D subspace
+5. Optimization trajectories in a 2D subspace
 6. Relative dampings chosen by the directional bootstrap damping
 """
 
@@ -149,6 +149,11 @@ def get_color(optimizer_name):
         # Determine color based on rel_col
         cmap = plt.get_cmap("viridis")
         return cmap(rel_col.item())
+
+    # Exponential schedule
+    elif "EDN" in optimizer_name:
+        return "#e336e3"  # Pink
+
     else:
         print(f"Could not determine color for {optimizer_name}\nReturn black")
         return "k"
@@ -173,6 +178,16 @@ def set_bp_color(boxplot, color):
         plt.setp(boxplot[item], color=color)
 
 
+def exponent_nice_str(exponent_str):
+    """Convert exponent string like ``1e-04`` to ``$10^{-4}$``"""
+    split_str = exponent_str.split("e")
+    if split_str[0] == "1":
+        split_str[0] = ""
+    split_str[1] = "{" + f"{int(split_str[1])}" + "}"
+    nice_exponent_str = rf"{split_str[0]} 10^{split_str[1]}"
+    return nice_exponent_str
+
+
 if __name__ == "__main__":  # noqa: C901
 
     # Find all scenarios
@@ -189,9 +204,9 @@ if __name__ == "__main__":  # noqa: C901
     LOSS_LINTHRESH = 1e-1  # Linear threshold for symlog plot
     DIST_LINTHRESH = 1e-1  # Linear threshold for symlog plot
     ALPHA = 0.3
-    FIGSIZE = (5, 5)
+    FIGSIZE = (6, 6)
     PLOT_RUNS = 0  # Plot individual runs (loss and distance over optimization steps)
-    PLOT_TRAJECTORIES = 3  # # Plot individual trajectories
+    PLOT_TRAJECTORIES = 3  # Plot individual trajectories
 
     for scenario_name in SCENARIO_NAMES:
         print(f"   Visualization for scenario '{scenario_name}'")
@@ -199,6 +214,7 @@ if __name__ == "__main__":  # noqa: C901
         # Extract some important parameters
         scenario_dict = load_scenario(scenario_name)
         NOF_RUNS = scenario_dict["NOF_RUNS"]
+        # NOF_RUNS = 50
         NOF_STEPS = scenario_dict["NOF_STEPS"]
         CDN_DAMPINGS = scenario_dict["CDN_DAMPINGS"]
         DAMPING_GRID = np.array(scenario_dict["BDN_DAMPING_GRID"])
@@ -207,22 +223,35 @@ if __name__ == "__main__":  # noqa: C901
         F_B = torch.Tensor(scenario_dict["F_B"])
         F_C = torch.Tensor(scenario_dict["F_C"])
         D = len(F_B)
+        EDN_DAMPING_START = scenario_dict["EDN_DAMPING_START"]
+        EDN_DAMPING_END = scenario_dict["EDN_DAMPING_END"]
 
         # List of optimizers
         OPTIMIZER_NAMES = ["SGD", "BDN"]
+
+        # CDN
         for damping in CDN_DAMPINGS:
             OPTIMIZER_NAMES.append(f"CDN_{damping:.1e}")
 
+        # EDN
+        for edn_start in EDN_DAMPING_START:
+            for edn_end in EDN_DAMPING_END:
+                OPTIMIZER_NAMES.append(f"EDN_{edn_start:.1e}_{edn_end:.1e}")
+
         # Construct labels
         LABELS = ["SGD", r"$\delta_k$ (ours)"]
+
+        # CDN
         for damping in CDN_DAMPINGS:
-            exponent_str = f"{damping:.0e}"
-            split_str = exponent_str.split("e")
-            if split_str[0] == "1":
-                split_str[0] = ""
-            split_str[1] = "{" + f"{int(split_str[1])}" + "}"
-            damping_str = rf"{split_str[0]} 10^{split_str[1]}"
-            LABELS.append(rf"$\delta = {damping_str}$")
+            exponent_str = exponent_nice_str(f"{damping:.0e}")
+            LABELS.append(rf"$\delta = {exponent_str}$")
+
+        # EDN
+        for edn_start in EDN_DAMPING_START:
+            edn_start_str = exponent_nice_str(f"{edn_start:.0e}")
+            for edn_end in EDN_DAMPING_END:
+                edn_end_str = exponent_nice_str(f"{edn_end:.0e}")
+                LABELS.append(rf"$\delta: {edn_start_str} \rightarrow {edn_end_str}$")
 
         # Subspace indices for plotting the trajectories
         SUBSPACE_INDEX_1 = 0
@@ -238,7 +267,13 @@ if __name__ == "__main__":  # noqa: C901
 
         # Choose and plot optimizers
         # plot_optimizers = OPTIMIZER_NAMES
-        plot_optimizers = ["BDN", "CDN_1.0e-04", "CDN_1.0e+00", "CDN_1.0e+02"]
+        plot_optimizers = [
+            "BDN",
+            "CDN_1.0e-04",
+            "CDN_1.0e+00",
+            "CDN_1.0e+02",
+            "EDN_1.0e-04_1.0e+01",
+        ]
         for opt_idx, opt_name in enumerate(OPTIMIZER_NAMES):
             if opt_name not in plot_optimizers:
                 continue
@@ -290,7 +325,13 @@ if __name__ == "__main__":  # noqa: C901
 
         # Choose and plot optimizers
         # plot_optimizers = OPTIMIZER_NAMES
-        plot_optimizers = ["BDN", "CDN_1.0e-04", "CDN_1.0e+00", "CDN_1.0e+02"]
+        plot_optimizers = [
+            "BDN",
+            "CDN_1.0e-04",
+            "CDN_1.0e+00",
+            "CDN_1.0e+02",
+            "EDN_1.0e-04_1.0e+01",
+        ]
         for opt_idx, opt_name in enumerate(OPTIMIZER_NAMES):
             if opt_name not in plot_optimizers:
                 continue
@@ -439,7 +480,13 @@ if __name__ == "__main__":  # noqa: C901
 
         # Choose and plot optimizers
         # plot_optimizers = OPTIMIZER_NAMES
-        plot_optimizers = ["BDN", "CDN_1.0e-04", "CDN_1.0e+00", "CDN_1.0e+02"]
+        plot_optimizers = [
+            "BDN",
+            "CDN_1.0e-04",
+            "CDN_1.0e+00",
+            "CDN_1.0e+02",
+            "EDN_1.0e-04_1.0e+01",
+        ]
         for opt_idx, opt_name in enumerate(OPTIMIZER_NAMES):
             if opt_name not in plot_optimizers:
                 continue

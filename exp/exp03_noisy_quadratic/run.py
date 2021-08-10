@@ -12,7 +12,7 @@ from backpack import backpack, extend
 
 from exp.toy_problem import Objective, Quadratic, ToyProblem
 from vivit.optim import BaseComputations, DampedNewton
-from vivit.optim.damping import BootstrapDamping2, ConstantDamping
+from vivit.optim.damping import BootstrapDamping2, ConstantDamping, ExponentialDamping
 
 
 def apply_noise(taylor_info, samples):
@@ -244,6 +244,8 @@ def save_scenario(scenario_name):
         "LR_CDN": LR_CDN,
         "CDN_DAMPINGS": tensor_to_list(CDN_DAMPINGS),
         "BDN_DAMPING_GRID": tensor_to_list(BDN_DAMPING_GRID),
+        "EDN_DAMPING_START": EDN_DAMPING_START,
+        "EDN_DAMPING_END": EDN_DAMPING_END,
         "GAMMAS_VARIANCE": tensor_to_list(GAMMAS_VARIANCE),
         "LAMBDAS_VARIANCE": tensor_to_list(LAMBDAS_VARIANCE),
         "ARGMIN": tensor_to_list(ARGMIN.reshape(-1)),
@@ -283,6 +285,8 @@ LR_BDN = 1.0
 LR_CDN = 1.0
 CDN_DAMPINGS = torch.logspace(-4, 2, 7)
 BDN_DAMPING_GRID = torch.logspace(-4, 2, 200)
+EDN_DAMPING_START = [1e-4, 1e-3]
+EDN_DAMPING_END = [1, 10]
 
 # Noise
 GAMMAS_VARIANCE = 5000.0 * torch.ones(D)
@@ -332,3 +336,15 @@ if __name__ == "__main__":
                 damping, lr=LR_CDN, nof_steps=NOF_STEPS
             )
             save_results(scenario_name, optimizer_name, run, trajectory, f_vals)
+
+        # Run EDN with different start/end values
+        for damping_start in EDN_DAMPING_START:
+            for damping_end in EDN_DAMPING_END:
+                scale = (damping_end / damping_start) ** (1 / NOF_STEPS)
+                optimizer_name = f"EDN_{damping_start:.1e}_{damping_end:.1e}"
+                print("   Running " + optimizer_name)
+                damping = ExponentialDamping(damping_start, scale)
+                trajectory, f_vals, _ = run_DampedNewton(
+                    damping, lr=LR_CDN, nof_steps=NOF_STEPS
+                )
+                save_results(scenario_name, optimizer_name, run, trajectory, f_vals)

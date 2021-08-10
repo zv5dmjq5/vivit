@@ -2,6 +2,8 @@
 
 import torch
 
+from vivit.optim.damping import ExponentialDamping
+
 
 class DampedNewton(torch.optim.Optimizer):
     """
@@ -116,6 +118,9 @@ class DampedNewton(torch.optim.Optimizer):
         """
         for group in self.param_groups:
             self.step_group(group, lr)
+
+        if isinstance(self._damping, ExponentialDamping):
+            self._damping.step()
 
     def step_group(self, group, lr=1.0):
         """Apply damped Newton step to a parameter group.

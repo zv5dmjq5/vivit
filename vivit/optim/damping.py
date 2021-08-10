@@ -56,6 +56,26 @@ class ConstantDamping(BaseDamping):
         return self._damping * torch.ones(num_directions, device=device)
 
 
+class ExponentialDamping(ConstantDamping):
+    """Exponentially decaying isotropic damping."""
+
+    def __init__(self, damping_start: float, scale: float):
+        """Store damping constant.
+
+        Args:
+            damping_start: Initial damping value.
+            scale: Scaling that will be applied to the current damping value.
+        """
+        super().__init__(damping=damping_start)
+        self._scale = scale
+
+    def step(self):
+        """Update damping value."""
+        # print(f"Updating damping: {self._damping:.5f} → ", end="")
+        self._damping *= self._scale
+        # print(f"{self._damping:.5f}")
+
+
 class BootstrapDamping(BaseDamping):
     """Adaptive damping, uses Bootstrap to generate gain samples."""
 
