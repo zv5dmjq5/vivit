@@ -1,0 +1,95 @@
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Time (exact): 5.846184015274048 s
+Time (power): 7.276953935623169 s
+Result (exact): tensor([2.0126], device='cuda:0')
+Result (power): tensor([2.0045], device='cuda:0')
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Time (exact): 5.868013620376587 s
+Time (power): 7.278478622436523 s
+Result (exact): tensor([2.0126], device='cuda:0')
+Result (power): tensor([2.0045], device='cuda:0')
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Time (exact): 5.834745407104492 s
+Time (power): 7.2836668491363525 s
+Result (exact): tensor([2.0126], device='cuda:0')
+Result (power): tensor([2.0045], device='cuda:0')
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Time (exact): 5.844830513000488 s
+Time (power): 7.272765398025513 s
+Result (exact): tensor([2.0126], device='cuda:0')
+Result (power): tensor([2.0045], device='cuda:0')
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Files already downloaded and verified
+Time (exact): 5.870133399963379 s
+Time (power): 7.267772197723389 s
+Result (exact): tensor([2.0126], device='cuda:0')
+Result (power): tensor([2.0045], device='cuda:0')
