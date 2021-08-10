@@ -214,7 +214,6 @@ if __name__ == "__main__":  # noqa: C901
         # Extract some important parameters
         scenario_dict = load_scenario(scenario_name)
         NOF_RUNS = scenario_dict["NOF_RUNS"]
-        # NOF_RUNS = 50
         NOF_STEPS = scenario_dict["NOF_STEPS"]
         CDN_DAMPINGS = scenario_dict["CDN_DAMPINGS"]
         DAMPING_GRID = np.array(scenario_dict["BDN_DAMPING_GRID"])
